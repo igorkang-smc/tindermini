@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "92489019928",
+    "project_id": "tinderclone-f0a17",
+    "storage_bucket": "tinderclone-f0a17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92489019928:android:47ac37f93bddeb1a1f096d",
+        "android_client_info": {
+          "package_name": "com.example.tc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcDMH4_OlWTm5GwYzIxbS3D0sc_iy0EVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92489019928:android:a08c08689f4725ea1f096d",
+        "android_client_info": {
+          "package_name": "com.example.tinderclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcDMH4_OlWTm5GwYzIxbS3D0sc_iy0EVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92489019928:android:eb73c1a2e5a7284e1f096d",
+        "android_client_info": {
+          "package_name": "com.example.tinderclonee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcDMH4_OlWTm5GwYzIxbS3D0sc_iy0EVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92489019928:android:d59f0aabbd2cc3761f096d",
+        "android_client_info": {
+          "package_name": "com.korusell.tinderclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcDMH4_OlWTm5GwYzIxbS3D0sc_iy0EVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92489019928-sva2rjglsbjd2agh8m54dvdcfbtl2a71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
