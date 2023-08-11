@@ -6,21 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tinderclone.ui.ChatListScreen
-import com.example.tinderclone.DestinationScreen
 import com.example.tinderclone.ui.ProfileScreen
 import com.example.tinderclone.ui.SignupScreen
 import com.example.tinderclone.ui.SingleChatScreen
-import com.example.tinderclone.ui.SwipeCards
+import com.example.tinderclone.ui.SwipeScreen
 import com.example.tinderclone.ui.theme.tindercloneTheme
 import com.example.tinderclonee.ui.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,7 +56,7 @@ fun SwipeAppNavigation() {
             ProfileScreen(navController, vm)
         }
         composable(DestinationScreen.Swipe.route) {
-            SwipeCards(navController)
+            SwipeScreen(navController, vm)
         }
         composable(DestinationScreen.ChatList.route) {
             ChatListScreen(navController)

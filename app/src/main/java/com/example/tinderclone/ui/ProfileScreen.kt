@@ -54,9 +54,9 @@ fun ProfileScreen(navController: NavController, vm: TCViewModel) {
     else {
         val userData = vm.userData.value
         val g = if (userData?.gender.isNullOrEmpty()) "MALE"
-        else userData!!.gender!!.uppercase()
+            else userData!!.gender!!.uppercase()
         val gPref = if (userData?.genderPreference.isNullOrEmpty()) "FEMALE"
-        else userData!!.genderPreference!!.uppercase()
+            else userData!!.genderPreference!!.uppercase()
         var name by rememberSaveable { mutableStateOf(userData?.name ?: "") }
         var username by rememberSaveable { mutableStateOf(userData?.userName ?: "") }
         var bio by rememberSaveable { mutableStateOf(userData?.bio ?: "") }
@@ -298,17 +298,20 @@ fun ProfileImage(imageUrl: String?, vm: TCViewModel) {
     }
 
     Box(modifier = Modifier.height(IntrinsicSize.Min)) {
-        Column(modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .clickable {
-                launcher.launch("image/*")
-            },
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .clickable {
+                    launcher.launch("image/*")
+                },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(shape = CircleShape, modifier = Modifier
-                .padding(8.dp)
-                .size(100.dp)) {
+            Card(
+                shape = CircleShape, modifier = Modifier
+                    .padding(8.dp)
+                    .size(100.dp)
+            ) {
                 CommonImage(data = imageUrl)
             }
             Text(text = "Change profile picture")

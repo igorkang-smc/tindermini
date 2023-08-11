@@ -4,11 +4,16 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.tinderclone.data.COLLECTION_CHAT
 import com.example.tinderclone.data.COLLECTION_USER
+import com.example.tinderclone.data.ChatData
+import com.example.tinderclone.data.ChatUser
 import com.example.tinderclone.data.Event
 import com.example.tinderclone.data.UserData
 import com.example.tinderclone.ui.Gender
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
@@ -41,8 +46,10 @@ class TCViewModel @Inject constructor(
     val signedIn = mutableStateOf(value = false)
     val userData = mutableStateOf<UserData?>(value = null)
 
+    val matchProfiles = mutableStateOf<List<UserData>>(listOf())
+    val inProgressProfiles = mutableStateOf(false)
+
     init {
-        auth.signOut()
         val currentUser = auth.currentUser
         signedIn.value = currentUser != null
         currentUser?.uid?.let { uid ->
@@ -60,6 +67,7 @@ class TCViewModel @Inject constructor(
                 val user = value.toObject<UserData>()
                 userData.value = user
                 inProgress.value = false
+                populateCards()
             }
         }
     }
@@ -197,6 +205,7 @@ class TCViewModel @Inject constructor(
                             .addOnSuccessListener {
                                 this.userData.value = userData
                                 inProgress.value = false
+                                populateCards()
                             }
                             .addOnFailureListener {
                                 handleException(it, "Cannot update user")
@@ -209,6 +218,95 @@ class TCViewModel @Inject constructor(
                 }.addOnFailureListener {
                     handleException(it, "Cannot update user")
                 }
+        }
+    }
+
+    private fun populateCards() {
+        inProgressProfiles.value = true
+
+        val g =
+            if (userData.value?.gender.isNullOrEmpty()) "ANY" else userData.value!!.gender!!.uppercase()
+
+        val gPref =
+            if (userData.value?.genderPreference.isNullOrEmpty()) "ANY" else userData.value!!.genderPreference!!.uppercase()
+
+        val cardsQuery = when (Gender.valueOf(gPref)) {
+            Gender.MALE -> db.collection(COLLECTION_USER).whereEqualTo("gender", Gender.MALE)
+            Gender.FEMALE -> db.collection(COLLECTION_USER).whereEqualTo("gender", Gender.FEMALE)
+            Gender.ANY -> db.collection(COLLECTION_USER)
+        }
+        val userGender = Gender.valueOf(g)
+
+        cardsQuery.where(
+            Filter.and(
+                Filter.notEqualTo("userId", userData.value?.userId),
+                Filter.or(
+                    Filter.equalTo("genderPreference", userGender),
+                    Filter.equalTo("genderPreference", Gender.ANY)
+                )
+            )
+        ).addSnapshotListener { value, error ->
+            if (error != null) {
+                inProgressProfiles.value = false
+                handleException(error)
+            }
+            if (value != null) {
+                val potentials = mutableListOf<UserData>()
+                value.documents.forEach {
+                    it.toObject<UserData>()?.let { potential ->
+                        var showUser = true
+                        if (userData.value?.swipesLeft?.contains(potential.userId) == true ||
+                            userData.value?.swiperRight?.contains(potential.userId) == true ||
+                            userData.value?.matches?.contains(potential.userId) == true
+                        )
+                            showUser = false
+                        if (showUser)
+                            potentials.add(potential)
+                    }
+                }
+                matchProfiles.value = potentials
+                inProgressProfiles.value = false
+            }
+        }
+    }
+
+    fun onDislike(selectedUser: UserData) {
+        db.collection(COLLECTION_USER).document(userData.value?.userId ?: "")
+            .update("swipresLeft", FieldValue.arrayUnion(selectedUser.userId))
+    }
+
+    fun onLike(selectedUser: UserData) {
+        val reciprocalMatch = selectedUser.swiperRight.contains(userData.value?.userId)
+        if (!reciprocalMatch) {
+            db.collection(COLLECTION_USER).document(userData.value?.userId ?: "")
+                .update("swipesRight", FieldValue.arrayUnion(selectedUser.userId))
+        } else {
+            popupNotification.value = Event("Match!")
+
+            db.collection(COLLECTION_USER).document(selectedUser.userId ?: "")
+                .update("swipesRight", FieldValue.arrayRemove(userData.value?.userId))
+
+            db.collection(COLLECTION_USER).document(selectedUser.userId ?: "")
+                .update("matches", FieldValue.arrayUnion(userData.value?.userId))
+
+            db.collection(COLLECTION_USER).document(userData.value?.userId ?: "")
+                .update("matches", FieldValue.arrayUnion(selectedUser.userId))
+
+            val chatKey = db.collection(COLLECTION_CHAT).document().id
+            val chatData = ChatData(
+                chatKey,
+                ChatUser(
+                    userData.value?.userId,
+                    if (userData.value?.name.isNullOrEmpty()) userData.value?.userName else userData.value?.name,
+                    userData.value?.imageUrl
+                ),
+                ChatUser(
+                    selectedUser.userId,
+                    if (selectedUser.name.isNullOrEmpty()) selectedUser.userName else selectedUser.name,
+                    selectedUser.imageUrl
+                )
+            )
+            db.collection(COLLECTION_CHAT).document(chatKey).set(chatData)
         }
     }
 }

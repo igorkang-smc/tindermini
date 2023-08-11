@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +46,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tinderclone.CommonImage
+import com.example.tinderclone.CommonProgressSpinner
+import com.example.tinderclone.TCViewModel
+import com.example.tinderclone.data.UserData
 import com.example.tinderclone.swipecards.Direction
 import com.example.tinderclone.swipecards.MatchProfile
 import com.example.tinderclone.swipecards.profiles
@@ -54,104 +59,87 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 @Composable
-fun SwipeCards(navController: NavController) {
-    TransparentSystemBars()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(0xfff68084),
-                        Color(0xffa6c0fe),
-                    )
-                )
-            )
-//                        .systemBarsPadding()
-    ) {
-        Box(modifier = Modifier.weight(1f)) {
-            val states = profiles.reversed()
-                .map { it to rememberSwipeableCardState() }
-            var hint by remember {
-                mutableStateOf("Swipe a card or press a button below")
-            }
-
-            Hint(hint)
-
-            val scope = rememberCoroutineScope()
+fun SwipeScreen(navController: NavController, vm: TCViewModel) {
+    val inProgress = vm.inProgressProfiles.value
+    if (inProgress)
+        CommonProgressSpinner()
+    else {
+        val profiles = vm.matchProfiles.value
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            //Spacer
+            Spacer(modifier = Modifier.height(1.dp))
+            //Cards
+            val states = profiles.map { it to rememberSwipeableCardState() }
             Box(
-                Modifier
+                modifier = Modifier
                     .padding(24.dp)
-                    .fillMaxSize()
                     .aspectRatio(1f)
-                    .align(Alignment.Center)
             ) {
-                states.forEach { (matchProfile, state) ->
-                    if (state.swipedDirection == null) {
-                        ProfileCard(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .swipableCard(
-                                    state = state,
-                                    blockedDirections = listOf(Direction.Down),
-                                    onSwiped = {
-                                        // swipes are handled by the LaunchedEffect
-                                        // so that we track button clicks & swipes
-                                        // from the same place
-                                    },
-                                    onSwipeCancel = {
-                                        Log.d("Swipeable-Card", "Cancelled swipe")
-                                        hint = "You canceled the swipe"
-                                    }
-                                ),
-                            matchProfile = matchProfile
-                        )
-                    }
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "No more profiles available")
+                }
+                states.forEach() { (matchProfile, state) ->
+                    ProfileCard(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .swipableCard(
+                                state = state,
+                                blockedDirections = listOf(Direction.Down),
+                                onSwiped = {},
+                                onSwipeCancel = { Log.d("Swipeable card", "Cancelled swipe") }
+                            ),
+                        matchProfile = matchProfile
+                    )
                     LaunchedEffect(matchProfile, state.swipedDirection) {
                         if (state.swipedDirection != null) {
-                            hint = "You swiped ${stringFrom(state.swipedDirection!!)}"
+                            if (state.swipedDirection == Direction.Left || state.swipedDirection == Direction.Down) {
+                                vm.onDislike(matchProfile)
+                            } else {
+                                vm.onLike(matchProfile)
+                            }
                         }
                     }
                 }
             }
+            //Buttons
+            val scope = rememberCoroutineScope()
             Row(
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp, vertical = 32.dp)
+                modifier = Modifier
+                    .padding(24.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                CircleButton(
-                    onClick = {
-                        scope.launch {
-                            val last = states.reversed()
-                                .firstOrNull {
-                                    it.second.offset.value == Offset(0f, 0f)
-                                }?.second
-                            last?.swipe(Direction.Left)
-                        }
-                    },
-                    icon = Icons.Rounded.Close
-                )
-                CircleButton(
-                    onClick = {
-                        scope.launch {
-                            val last = states.reversed()
-                                .firstOrNull {
-                                    it.second.offset.value == Offset(0f, 0f)
-                                }?.second
+                CircleButton(onClick = {
+                    scope.launch {
+                        val last = states.reversed().firstOrNull() {
+                            it.second.offset.value == Offset(0f, 0f)
+                        }?.second
+                        last?.swipe(Direction.Left)
+                    }
+                }, icon = Icons.Rounded.Close)
 
-                            last?.swipe(Direction.Right)
-                        }
-                    },
-                    icon = Icons.Rounded.Favorite
-                )
+                CircleButton(onClick = {
+                    scope.launch {
+                        val last = states.reversed().firstOrNull() {
+                            it.second.offset.value == Offset(0f, 0f)
+                        }?.second
+                        last?.swipe(Direction.Right)
+                    }
+                }, icon = Icons.Rounded.Favorite)
             }
+            //Bottom nav bar
+            BottomNavigationMenu(
+                selectedItem = BottomNavigationItem.SWIPE,
+                navController = navController
+            )
         }
-        BottomNavigationMenu(
-            selectedItem = BottomNavigationItem.SWIPE,
-            navController = navController
-        )
     }
 }
 
@@ -178,20 +166,15 @@ private fun CircleButton(
 @Composable
 private fun ProfileCard(
     modifier: Modifier,
-    matchProfile: MatchProfile,
+    matchProfile: UserData,
 ) {
     Card(modifier) {
         Box {
-            Image(
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(matchProfile.drawableResId),
-                contentDescription = null
-            )
+            CommonImage(data = matchProfile.imageUrl, modifier = Modifier.fillMaxSize())
             Scrim(Modifier.align(Alignment.BottomCenter))
             Column(Modifier.align(Alignment.BottomStart)) {
                 Text(
-                    text = matchProfile.name,
+                    text = matchProfile.name ?: matchProfile.userName ?: "",
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Medium,
@@ -201,49 +184,6 @@ private fun ProfileCard(
         }
     }
 }
-
-@Composable
-private fun Hint(text: String) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .padding(horizontal = 24.dp, vertical = 32.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = text,
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-private fun TransparentSystemBars() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = false
-
-    DisposableEffect(systemUiController, useDarkIcons) {
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = useDarkIcons,
-            isNavigationBarContrastEnforced = false
-        )
-        onDispose {}
-    }
-}
-
-private fun stringFrom(direction: Direction): String {
-    return when (direction) {
-        Direction.Left -> "Left 👈"
-        Direction.Right -> "Right 👉"
-        Direction.Up -> "Up 👆"
-        Direction.Down -> "Down 👇"
-    }
-}
-
 
 @Composable
 fun Scrim(modifier: Modifier = Modifier) {
