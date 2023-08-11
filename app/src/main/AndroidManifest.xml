@@ -11,17 +11,16 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true"
-        android:hardwareAccelerated="false"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TinderClonee"
+        android:theme="@style/Theme.TinderClone"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.TinderClonee">
+            android:theme="@style/Theme.TinderClone">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

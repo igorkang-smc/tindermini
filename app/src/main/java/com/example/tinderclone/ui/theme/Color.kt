@@ -1,4 +1,4 @@
-package com.example.tinderclonee.ui.theme
+package com.example.tinderclone.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

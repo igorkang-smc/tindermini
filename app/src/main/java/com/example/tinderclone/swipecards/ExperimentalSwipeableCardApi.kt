@@ -1,3 +1,3 @@
-package com.example.tinderclonee.swipecards;
+package com.example.tinderclone.swipecards;
 
 annotation class ExperimentalSwipeableCardApi()

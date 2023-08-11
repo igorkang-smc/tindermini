@@ -1,4 +1,4 @@
-package com.example.tinderclonee
+package com.example.tinderclone
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

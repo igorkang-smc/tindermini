@@ -1,4 +1,4 @@
-package com.example.tinderclonee.swipecards
+package com.example.tinderclone.swipecards
 
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.ui.Modifier

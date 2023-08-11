@@ -1,4 +1,4 @@
-package com.example.tinderclonee.ui
+package com.example.tinderclone.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,8 +15,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.tinderclonee.R
-import com.example.tinderclonee.navigateTo
+import com.example.tinderclone.DestinationScreen
+import com.example.tinderclone.R
+import com.example.tinderclone.navigateTo
 
 enum class BottomNavigationItem(val icon: Int, val navDestination: DestinationScreen) {
     SWIPE(R.drawable.baseline_swipe, DestinationScreen.Swipe),

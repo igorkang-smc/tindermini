@@ -1,4 +1,4 @@
-package com.example.tinderclonee.swipecards
+package com.example.tinderclone.swipecards
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec

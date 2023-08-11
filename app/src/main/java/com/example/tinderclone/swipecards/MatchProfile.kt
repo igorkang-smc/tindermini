@@ -1,7 +1,7 @@
-package com.example.tinderclonee.swipecards
+package com.example.tinderclone.swipecards
 
 import androidx.annotation.DrawableRes
-import com.example.tinderclonee.R
+import com.example.tinderclone.R
 
 data class MatchProfile(
     val name: String,

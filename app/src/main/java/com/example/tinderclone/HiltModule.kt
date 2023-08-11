@@ -1,4 +1,4 @@
-package com.example.tinderclonee
+package com.example.tinderclone
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

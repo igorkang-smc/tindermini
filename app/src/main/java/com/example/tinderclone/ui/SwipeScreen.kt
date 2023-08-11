@@ -1,4 +1,4 @@
-package com.example.tinderclonee.ui
+package com.example.tinderclone.ui
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -45,11 +45,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.tinderclonee.swipecards.Direction
-import com.example.tinderclonee.swipecards.MatchProfile
-import com.example.tinderclonee.swipecards.profiles
-import com.example.tinderclonee.swipecards.rememberSwipeableCardState
-import com.example.tinderclonee.swipecards.swipableCard
+import com.example.tinderclone.swipecards.Direction
+import com.example.tinderclone.swipecards.MatchProfile
+import com.example.tinderclone.swipecards.profiles
+import com.example.tinderclone.swipecards.rememberSwipeableCardState
+import com.example.tinderclone.swipecards.swipableCard
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
