@@ -59,10 +59,13 @@ fun SwipeAppNavigation() {
             SwipeScreen(navController, vm)
         }
         composable(DestinationScreen.ChatList.route) {
-            ChatListScreen(navController)
+            ChatListScreen(navController, vm)
         }
         composable(DestinationScreen.SingleChat.route) {
-            SingleChatScreen("123")
+            val chatId = it.arguments?.getString("chatId")
+            chatId?.let {
+                SingleChatScreen(navController = navController, vm = vm, chatId = it)
+            }
         }
     }
 }
