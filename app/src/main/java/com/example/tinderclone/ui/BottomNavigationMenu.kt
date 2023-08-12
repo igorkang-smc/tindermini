@@ -22,7 +22,7 @@ import com.example.tinderclone.navigateTo
 enum class BottomNavigationItem(val icon: Int, val navDestination: DestinationScreen) {
     SWIPE(R.drawable.baseline_swipe, DestinationScreen.Swipe),
     CHATLIST(R.drawable.baseline_chat, DestinationScreen.ChatList),
-    PROFILE(R.drawable.baseline_profile, DestinationScreen.Profile),
+    PROFILE(R.drawable.baseline_profile, DestinationScreen.Profile)
 }
 
 @Composable
@@ -46,8 +46,11 @@ fun BottomNavigationMenu(selectedItem: BottomNavigationItem, navController: NavC
                         navigateTo(navController, item.navDestination.route)
                     },
                 colorFilter = if (item == selectedItem) ColorFilter.tint(Color.Black)
-                    else ColorFilter.tint(Color.Gray)
+                else ColorFilter.tint(Color.Gray)
             )
         }
     }
 }
+
+
+

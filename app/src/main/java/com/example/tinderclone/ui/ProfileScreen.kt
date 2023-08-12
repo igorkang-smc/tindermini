@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tinderclone.CommonDivider
 import com.example.tinderclone.CommonImage
-//import com.example.tinderclone.CommonImage
 import com.example.tinderclone.CommonProgressSpinner
 import com.example.tinderclone.DestinationScreen
 import com.example.tinderclone.TCViewModel
@@ -58,7 +57,7 @@ fun ProfileScreen(navController: NavController, vm: TCViewModel) {
         val gPref = if (userData?.genderPreference.isNullOrEmpty()) "FEMALE"
             else userData!!.genderPreference!!.uppercase()
         var name by rememberSaveable { mutableStateOf(userData?.name ?: "") }
-        var username by rememberSaveable { mutableStateOf(userData?.userName ?: "") }
+        var username by rememberSaveable { mutableStateOf(userData?.username ?: "") }
         var bio by rememberSaveable { mutableStateOf(userData?.bio ?: "") }
         var gender by rememberSaveable { mutableStateOf(Gender.valueOf(g)) }
         var genderPreference by rememberSaveable { mutableStateOf(Gender.valueOf(gPref)) }
@@ -298,20 +297,17 @@ fun ProfileImage(imageUrl: String?, vm: TCViewModel) {
     }
 
     Box(modifier = Modifier.height(IntrinsicSize.Min)) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .clickable {
-                    launcher.launch("image/*")
-                },
+        Column(modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .clickable {
+                launcher.launch("image/*")
+            },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(
-                shape = CircleShape, modifier = Modifier
-                    .padding(8.dp)
-                    .size(100.dp)
-            ) {
+            Card(shape = CircleShape, modifier = Modifier
+                .padding(8.dp)
+                .size(100.dp)) {
                 CommonImage(data = imageUrl)
             }
             Text(text = "Change profile picture")

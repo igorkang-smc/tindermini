@@ -49,9 +49,10 @@ fun SignupScreen(navController: NavController, vm: TCViewModel) {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             val usernameState = remember { mutableStateOf(TextFieldValue()) }
-            val passwordState = remember { mutableStateOf(TextFieldValue()) }
             val emailState = remember { mutableStateOf(TextFieldValue()) }
+            val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
             val focus = LocalFocusManager.current
 
@@ -63,12 +64,14 @@ fun SignupScreen(navController: NavController, vm: TCViewModel) {
                     .padding(top = 16.dp)
                     .padding(8.dp)
             )
+
             Text(
                 text = "Signup",
                 modifier = Modifier.padding(8.dp),
                 fontSize = 30.sp,
                 fontFamily = FontFamily.SansSerif
             )
+
             OutlinedTextField(
                 value = usernameState.value,
                 onValueChange = { usernameState.value = it },
@@ -97,19 +100,20 @@ fun SignupScreen(navController: NavController, vm: TCViewModel) {
                         emailState.value.text,
                         passwordState.value.text
                     )
-                }, modifier = Modifier.padding(8.dp)
+                },
+                modifier = Modifier.padding(8.dp)
             ) {
                 Text(text = "SIGN UP")
             }
 
-            Text(
-                text = "Already a user? Go to login ->",
+            Text(text = "Already a user? Go to login ->",
                 color = Color.Blue,
                 modifier = Modifier
                     .padding(8.dp)
                     .clickable { navigateTo(navController, DestinationScreen.Login.route) }
             )
         }
+
         val isLoading = vm.inProgress.value
         if (isLoading)
             CommonProgressSpinner()

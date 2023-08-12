@@ -1,6 +1,7 @@
 package com.example.tinderclone.data
 
-class Event<out T>(private val content: T) {
+open class Event<out T>(private val content: T) {
+
     var hasBeenHandled = false
         private set
 

@@ -69,9 +69,10 @@ fun SwipeScreen(navController: NavController, vm: TCViewModel) {
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxSize()
         ) {
-            //Spacer
+            // Spacer
             Spacer(modifier = Modifier.height(1.dp))
-            //Cards
+
+            // Cards
             val states = profiles.map { it to rememberSwipeableCardState() }
             Box(
                 modifier = Modifier
@@ -85,7 +86,7 @@ fun SwipeScreen(navController: NavController, vm: TCViewModel) {
                 ) {
                     Text(text = "No more profiles available")
                 }
-                states.forEach() { (matchProfile, state) ->
+                states.forEach { (matchProfile, state) ->
                     ProfileCard(
                         modifier = Modifier
                             .fillMaxSize()
@@ -93,13 +94,14 @@ fun SwipeScreen(navController: NavController, vm: TCViewModel) {
                                 state = state,
                                 blockedDirections = listOf(Direction.Down),
                                 onSwiped = {},
-                                onSwipeCancel = { Log.d("Swipeable card", "Cancelled swipe") }
-                            ),
+                                onSwipeCancel = { Log.d("Swipeable card", "Cancelled swipe") }),
                         matchProfile = matchProfile
                     )
                     LaunchedEffect(matchProfile, state.swipedDirection) {
                         if (state.swipedDirection != null) {
-                            if (state.swipedDirection == Direction.Left || state.swipedDirection == Direction.Down) {
+                            if (state.swipedDirection == Direction.Left ||
+                                state.swipedDirection == Direction.Down
+                            ) {
                                 vm.onDislike(matchProfile)
                             } else {
                                 vm.onLike(matchProfile)
@@ -108,7 +110,8 @@ fun SwipeScreen(navController: NavController, vm: TCViewModel) {
                     }
                 }
             }
-            //Buttons
+
+            // Buttons
             val scope = rememberCoroutineScope()
             Row(
                 modifier = Modifier
@@ -118,23 +121,23 @@ fun SwipeScreen(navController: NavController, vm: TCViewModel) {
             ) {
                 CircleButton(onClick = {
                     scope.launch {
-                        val last = states.reversed().firstOrNull() {
+                        val last = states.reversed().firstOrNull {
                             it.second.offset.value == Offset(0f, 0f)
                         }?.second
                         last?.swipe(Direction.Left)
                     }
                 }, icon = Icons.Rounded.Close)
-
                 CircleButton(onClick = {
                     scope.launch {
-                        val last = states.reversed().firstOrNull() {
+                        val last = states.reversed().firstOrNull {
                             it.second.offset.value == Offset(0f, 0f)
                         }?.second
                         last?.swipe(Direction.Right)
                     }
                 }, icon = Icons.Rounded.Favorite)
             }
-            //Bottom nav bar
+
+            // Bottom nav bar
             BottomNavigationMenu(
                 selectedItem = BottomNavigationItem.SWIPE,
                 navController = navController
@@ -174,7 +177,7 @@ private fun ProfileCard(
             Scrim(Modifier.align(Alignment.BottomCenter))
             Column(Modifier.align(Alignment.BottomStart)) {
                 Text(
-                    text = matchProfile.name ?: matchProfile.userName ?: "",
+                    text = matchProfile.name ?: matchProfile.username ?: "",
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Medium,
@@ -184,6 +187,7 @@ private fun ProfileCard(
         }
     }
 }
+
 
 @Composable
 fun Scrim(modifier: Modifier = Modifier) {

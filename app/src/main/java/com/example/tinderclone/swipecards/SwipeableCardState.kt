@@ -70,5 +70,3 @@ class SwipeableCardState(
         offset.animateTo(offset(x, y))
     }
 }
-
-

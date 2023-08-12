@@ -13,20 +13,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tinderclone.ui.ChatListScreen
+import com.example.tinderclone.ui.LoginScreen
 import com.example.tinderclone.ui.ProfileScreen
 import com.example.tinderclone.ui.SignupScreen
 import com.example.tinderclone.ui.SingleChatScreen
 import com.example.tinderclone.ui.SwipeScreen
-import com.example.tinderclone.ui.theme.tindercloneTheme
-import com.example.tinderclonee.ui.LoginScreen
+import com.example.tinderclone.ui.theme.TinderCloneTheme
 import dagger.hilt.android.AndroidEntryPoint
+
+sealed class DestinationScreen(val route: String) {
+    object Signup : DestinationScreen("signup")
+    object Login : DestinationScreen("login")
+    object Profile : DestinationScreen("profile")
+    object Swipe : DestinationScreen("swipe")
+    object ChatList : DestinationScreen("chatList")
+    object SingleChat : DestinationScreen("singleChat/{chatId}") {
+        fun createRoute(id: String) = "singleChat/$id"
+    }
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            tindercloneTheme {
+            TinderCloneTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -45,6 +56,7 @@ fun SwipeAppNavigation() {
     val vm = hiltViewModel<TCViewModel>()
 
     NotificationMessage(vm = vm)
+
     NavHost(navController = navController, startDestination = DestinationScreen.Signup.route) {
         composable(DestinationScreen.Signup.route) {
             SignupScreen(navController, vm)
@@ -69,3 +81,9 @@ fun SwipeAppNavigation() {
         }
     }
 }
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-package com.example.tinderclonee.ui
+package com.example.tinderclone.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

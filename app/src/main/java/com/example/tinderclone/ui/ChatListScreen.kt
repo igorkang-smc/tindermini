@@ -30,7 +30,7 @@ import com.example.tinderclone.navigateTo
 
 @Composable
 fun ChatListScreen(navController: NavController, vm: TCViewModel) {
-    val inProgress = vm.inProgress.value
+    val inProgress = vm.inProgressChats.value
     if (inProgress)
         CommonProgressSpinner()
     else {
@@ -38,6 +38,7 @@ fun ChatListScreen(navController: NavController, vm: TCViewModel) {
         val userData = vm.userData.value
 
         Column(modifier = Modifier.fillMaxSize()) {
+
             if (chats.isEmpty())
                 Column(
                     modifier = Modifier
@@ -76,7 +77,7 @@ fun ChatListScreen(navController: NavController, vm: TCViewModel) {
                                     .background(Color.Red)
                             )
                             Text(
-                                text = chatUser.name ?: "----",
+                                text = chatUser.name ?: "---",
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(start = 4.dp)
                             )
